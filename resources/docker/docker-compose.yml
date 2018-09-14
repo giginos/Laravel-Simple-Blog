@@ -1,8 +1,25 @@
 version: '2'
 
 services:
+  php:
+    container_name: lsb_php_${COMPOSE_PROJECT_NAME}
+    build:
+      context: ./dockerfiles/php/
+    #image: php:7.1-apache
+    restart: always
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html/public
+    depends_on:
+      - db
+    ports:
+      - 80:80
+    volumes:
+      - ./../../:/var/www/html
+    links:
+      - db
+
   db:
-    container_name: blog_db
+    container_name: lsb_db_${COMPOSE_PROJECT_NAME}
     image: mysql:5.7
     restart: always
     ports:
@@ -12,18 +29,3 @@ services:
       MYSQL_DATABASE: blog
       MYSQL_USER: blog
       MYSQL_PASSWORD: secret
-
-  php:
-    container_name: blog_php
-    build:
-      context: ./dockerfiles/php
-      dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - db
-    ports:
-      - 80:80
-    volumes:
-      - ./../../:/var/www/html
-    links:
-      - db
