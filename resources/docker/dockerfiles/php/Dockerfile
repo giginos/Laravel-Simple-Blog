@@ -8,6 +8,9 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Install PDO
 RUN docker-php-ext-install pdo pdo_mysql
 
+# Activate rewrite
+RUN a2enmod rewrite
+
 ################################################################################
 # Install PHP Composer
 ################################################################################
